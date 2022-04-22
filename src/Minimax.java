@@ -32,44 +32,72 @@ public class Minimax implements Player {
 		if (board.isFull()) {
 			throw new Error ("Complaint: The board is full!");
 		}
-
-		int col = 0;
 		int maxDepth = 1;
 
 		//While there is time remaining and search depth is <= the number of moves remaining
-		while(!arsb.isTimeUp() && maxDepth <= board.numEmptyCells()) {
+		int bestCol = -1, bestScore = -1;
+		while(!arb.isTimeUp() && maxDepth <= board.numEmptyCells()) {
+			for(int col = 0; col < board.numCols(); col++) {
+				System.out.println("col = " + col + ", maxDepth = " + maxDepth + ", bestCol = " + bestCol + ", bestScore = " + bestScore);
+				if (board.isValidMove(col)) {
+					board.move(col, id);
+					int score = minimax(board, maxDepth, false, arb);
+					if(score > bestScore) {
+						bestCol = col;
+						bestScore = score;
+					}
+					board.unmove(col, id);
+				}
+			}
 			//run the first level of the minimax search and set move to be the best column corresponding to be best score
 			//
 			maxDepth++;
-			arb.setMove(move);
+		}
+		if (bestCol >= 0) {
+			arb.setMove(bestCol);
+		}
+		else {
+			throw new Error ("Complaint: Something is wrong!");
 		}
 	}
 
-	public int minimax(connect4Board board, int depth, boolean isMaxaimizing, Arbitrator arb) {
-//		if depth = 0 or no moves or time is up
-//				return the heuristic value of node
+	public int minimax(Connect4Board board, int depth, boolean isMaximizing, Arbitrator arb) {
+		//		if depth = 0 or no moves or time is up
+		//				return the heuristic value of node
 
 		if (depth == 0 || board.isFull() || arb.isTimeUp()) {
 			return calcScore(board,id) - calcScore(board, opponent_id);
 		}
-//	if isMaximizing then
-//		bestScore = - 1000
-//		for each possible move do
-//			board.move(...) for your player
-//			bestScore := Math.max(bestScore, minimax(board, depth -1, false, arb))
-//			board.unmove(...)
-//			return bestScore;
-//
-//		else /* minimizing player */
-//			bestScore = 1000
-//			for each possible move do
-//				board.move(...) for your opponent's player
-//				bestScore = Math.min(bestScore, minimax(board, depth - 1, true, arb)
-//				board.unmove(...)
-//			return bestScore;
+		//	if isMaximizing then
+		if (isMaximizing) {
+			int bestScore = - 1000;
+			for(int col = 0; col < board.numCols(); col++) {
+				if (board.isValidMove(col)) {
+					board.move(col, id);
+
+					bestScore = Math.max(bestScore, minimax(board, depth -1, false, arb));
+					board.unmove(col, id);
+
+				} 
+			}
+			return bestScore;
+		}
+
+		else {
+			int bestScore = 1000;
+			for(int col = 0; col < board.numCols(); col++) {
+				if (board.isValidMove(col)) {
+
+					board.move(col, opponent_id);
+					bestScore = Math.min(bestScore, minimax(board, depth -1, true, arb));
+					board.unmove(col, opponent_id);
+				}
+			}
+			return bestScore;
+		}
 	}
 
-// return the number of connect-4s that player #id has.
+	// return the number of connect-4s that player #id has.
 	public int calcWinner(Connect4Board board)
 	{
 		final int rows = board.numRows();
