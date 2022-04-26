@@ -32,7 +32,7 @@ public class Minimax implements Player {
 		if (board.isFull()) {
 			throw new Error ("Complaint: The board is full!");
 		}
-		int maxDepth = 1;
+		int maxDepth = 4;
 
 		//While there is time remaining and search depth is <= the number of moves remaining
 		int bestCol = -1, bestScore = -1;
@@ -52,8 +52,9 @@ public class Minimax implements Player {
 			//run the first level of the minimax search and set move to be the best column corresponding to be best score
 			//
 			maxDepth++;
-		}
+	}
 		if (bestCol >= 0) {
+			System.out.println("bestCol = " + bestCol);
 			arb.setMove(bestCol);
 		}
 		else {
@@ -76,6 +77,7 @@ public class Minimax implements Player {
 					board.move(col, id);
 
 					bestScore = Math.max(bestScore, minimax(board, depth -1, false, arb));
+
 					board.unmove(col, id);
 
 				} 
@@ -89,7 +91,9 @@ public class Minimax implements Player {
 				if (board.isValidMove(col)) {
 
 					board.move(col, opponent_id);
+			
 					bestScore = Math.min(bestScore, minimax(board, depth -1, true, arb));
+
 					board.unmove(col, opponent_id);
 				}
 			}
@@ -198,6 +202,7 @@ public class Minimax implements Player {
 				score++;
 			}
 		}
+		//System.out.println("id = " + id + ", score = " + score);
 		return score;
 	}
 
