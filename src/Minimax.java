@@ -32,16 +32,17 @@ public class Minimax implements Player {
 		if (board.isFull()) {
 			throw new Error ("Complaint: The board is full!");
 		}
-		int maxDepth = 4;
+		int maxDepth = 1;
 
 		//While there is time remaining and search depth is <= the number of moves remaining
 		int bestCol = -1, bestScore = -1;
 		while(!arb.isTimeUp() && maxDepth <= board.numEmptyCells()) {
+			bestScore = -100;
 			for(int col = 0; col < board.numCols(); col++) {
 				System.out.println("col = " + col + ", maxDepth = " + maxDepth + ", bestCol = " + bestCol + ", bestScore = " + bestScore);
 				if (board.isValidMove(col)) {
 					board.move(col, id);
-					int score = minimax(board, maxDepth, false, arb);
+					int score = minimax(board, maxDepth -1, false, arb);
 					if(score > bestScore) {
 						bestCol = col;
 						bestScore = score;
@@ -51,11 +52,13 @@ public class Minimax implements Player {
 			}
 			//run the first level of the minimax search and set move to be the best column corresponding to be best score
 			//
-			maxDepth++;
+			maxDepth++; 
+			arb.setMove(bestCol);
 	}
 		if (bestCol >= 0) {
 			System.out.println("bestCol = " + bestCol);
 			arb.setMove(bestCol);
+			System.out.println("arb.getMove = " + arb.getMove());
 		}
 		else {
 			throw new Error ("Complaint: Something is wrong!");
