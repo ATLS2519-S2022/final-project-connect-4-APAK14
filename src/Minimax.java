@@ -36,9 +36,11 @@ public class Minimax implements Player {
 
 		//While there is time remaining and search depth is <= the number of moves remaining
 		int bestCol = -1, bestScore = -1;
+		int startCol = rand.nextInt(board.numCols());
 		while(!arb.isTimeUp() && maxDepth <= board.numEmptyCells()) {
 			bestScore = -100;
-			for(int col = 0; col < board.numCols(); col++) {
+			for(int col1 = 0; col1 < board.numCols(); col1++) {
+				int col = (col1 + startCol) % board.numCols();
 				System.out.println("col = " + col + ", maxDepth = " + maxDepth + ", bestCol = " + bestCol + ", bestScore = " + bestScore);
 				if (board.isValidMove(col)) {
 					board.move(col, id);
