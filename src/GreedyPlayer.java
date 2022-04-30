@@ -30,6 +30,7 @@ public class GreedyPlayer implements Player {
 		if (board.isFull()) {
 			throw new Error ("Complaint: The board is full!");
 		}
+		//Have greedy start at a random place instead of starting at the same column
 		int startCol = rand.nextInt(board.numCols());
 		int maxScore = -1, bestCol = -1;
 		for(int col1 = 0; col1 < cols; col1++) {
