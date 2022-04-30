@@ -14,7 +14,7 @@ public class AlphaBeta implements Player {
 
 	@Override
 	public String name() {
-		return "AlphaBeta";
+		return "Balph";
 	}
 
 	@Override
