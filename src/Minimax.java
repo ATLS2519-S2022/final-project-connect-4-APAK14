@@ -36,6 +36,7 @@ public class Minimax implements Player {
 
 		//While there is time remaining and search depth is <= the number of moves remaining
 		int bestCol = -1, bestScore = -1;
+		//Have minnie start at a random place instead of starting at the same column
 		int startCol = rand.nextInt(board.numCols());
 		while(!arb.isTimeUp() && maxDepth <= board.numEmptyCells()) {
 			bestScore = -100;
